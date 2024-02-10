@@ -1,17 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BasicMeetingApp.Models;
+using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 
 namespace BasicMeetingApp.Controllers
 {
     public class MeetingController : Controller
     {
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Apply()
         {
             return View();
         }
 
-        public IActionResult Apply()
+        [HttpPost]
+        public IActionResult Apply(Userinfo model)
         {
-            return View();
+            Repository.CreateUser(model);
+            ViewBag.UserCount = Repository.Users.Where(i=> i.WillAttend == true).Count();
+            return View("Thanks", model);
         }
 
         public IActionResult List()
