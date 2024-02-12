@@ -15,14 +15,27 @@ namespace BasicMeetingApp.Controllers
         [HttpPost]
         public IActionResult Apply(Userinfo model)
         {
-            Repository.CreateUser(model);
-            ViewBag.UserCount = Repository.Users.Where(i=> i.WillAttend == true).Count();
-            return View("Thanks", model);
+            if(ModelState.IsValid)
+            {
+                Repository.CreateUser(model);
+                ViewBag.UserCount = Repository.Users.Where(i => i.WillAttend == true).Count();
+                return View("Thanks", model);
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         public IActionResult List()
         {
-            return View();
+            var users = Repository.Users;
+            return View(users);
+        }
+
+        public IActionResult Details(int id)
+        {
+            return View(Repository.GetById(id));
         }
     }
 }

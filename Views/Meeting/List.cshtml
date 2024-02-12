@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<Userinfo>
+@{
     ViewBag.Title = "List";
 }
 <h1 class="h4">Toplantı Katılım Listesi</h1>
@@ -11,10 +12,24 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Emre Ercan</td>
-            <td>evet</td>
-            <td><a class="btn btn-sm btn-primary" href="#">Detay</a></td>
-        </tr>
+        @foreach(var user in Model)
+        {
+            var durum = user.WillAttend == true ? "Evet" : "Hayır";
+            var className = user.WillAttend == true ? "table-success" : "table-danger";
+
+            <tr class="@className">
+                <td>@user.Name</td>
+                <td>@durum</td>
+                <td><a class="btn btn-sm btn-primary" href="/meeting/details/@user.Id">Detay</a></td>
+            </tr>
+        }
     </tbody>
 </table>
+@{
+    var UserCount = Repository.Users.Where(i => i.WillAttend == true).Count();
+}
+<div class="card">
+    <div class="card-body">
+        <p>Katılımcı Sayısı : @UserCount</p>
+    </div>
+</div>
